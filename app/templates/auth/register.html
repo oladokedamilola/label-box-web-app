@@ -1,0 +1,100 @@
+<!-- templates/auth/register.html -->
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-4">Register</h2>
+        <form method="POST" action="{{ url_for('auth.register') }}">
+            {{ form.hidden_tag() }} <!-- CSRF protection -->
+
+            <!-- Username Field -->
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                {{ form.username(class="form-control", id="username") }}
+                {% for error in form.username.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                {{ form.email(class="form-control", id="email") }}
+                {% for error in form.email.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    {{ form.password(class="form-control", id="password") }}
+                    <button type="button" class="btn btn-outline-secondary px-2" id="toggle-password">
+                        <i class="fas fa-eye" style="font-size: 0.9rem;"></i>
+                    </button>
+                </div>
+                {% for error in form.password.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                    {{ form.confirm_password(class="form-control", id="confirm_password") }}
+                    <button type="button" class="btn btn-outline-secondary px-2" id="toggle-confirm-password">
+                        <i class="fas fa-eye" style="font-size: 0.9rem;"></i>
+                    </button>
+                </div>
+                {% for error in form.confirm_password.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mb-3">
+                {{ form.submit(class="btn btn-primary w-100") }}
+            </div>
+        </form>
+        <p class="text-center">Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+    </div>
+</div>
+
+<script>
+    // Password visibility toggle functionality
+    document.getElementById('toggle-password').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const passwordIcon = this.querySelector('i');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            passwordIcon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            passwordIcon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
+
+    document.getElementById('toggle-confirm-password').addEventListener('click', function () {
+        const confirmPasswordField = document.getElementById('confirm_password');
+        const confirmPasswordIcon = this.querySelector('i');
+
+        if (confirmPasswordField.type === 'password') {
+            confirmPasswordField.type = 'text';
+            confirmPasswordIcon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            confirmPasswordField.type = 'password';
+            confirmPasswordIcon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    });
+</script>
+{% endblock %}
+
+
+{% block footer %}
+{% endblock footer %}

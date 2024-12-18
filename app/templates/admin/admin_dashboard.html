@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .wrapper {
+        display: flex;
+    }
+    .sidebar {
+        width: 200px;
+        height: 100vh;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        transition: all 0.3s ease;
+    }
+    .content-area {
+        margin-left: 250px;
+        width: 100%;
+    }
+    #sidebar.closed {
+        transform: translateX(-250px);
+    }
+    #toggleSidebar {
+        position: fixed;
+        top: 70px;
+        left: -10px;
+        z-index: 100;
+        background: transparent;
+        border: none;
+        font-size: 30px;
+        color: black;
+    }
+</style>
+
+<div class="wrapper">
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar bg-dark text-white p-5">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{{ url_for('admin.create_project') }}">
+                <i class="bi bi-plus-circle"></i> Create Project
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="{{ url_for('admin.project_list') }}">
+                <i class="bi bi-list-ul"></i> Projects
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+    <!-- Content Area -->
+    <div id="content" class="content-area">
+        <!-- Toggle Sidebar Button -->
+        <button id="toggleSidebar" class="btn btn-dark">
+            <i class="bi bi-arrow-bar-left"></i>
+        </button>
+
+        <div class="container mt-5">
+            <h2 class="mb-4 text-center">Projects Overview</h2>
+            {% if projects|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Number of Tasks</th>
+                                <th>Number of Submissions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in projects %}
+                                <tr>
+                                    <td><a href="{{ url_for('admin.project_detail', project_id=project.id) }}">{{ project.name }}</a>
+                                    </td>
+                                    <td>{{ project.tasks|length }}</td>
+                                    <td>{{ project.submissions_count }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">No projects have been created yet.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('toggleSidebar').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('closed');
+    });
+</script>
+{% endblock %}
+
+
+
+{% block footer %}
+
+{% endblock %}

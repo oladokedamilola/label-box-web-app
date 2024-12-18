@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% block title %}Annotate Task{% endblock title %}
+
+{% block content %}
+<style>
+    #canvas-container {
+        position: relative;
+        width: 80%;
+        max-width: 800px;
+        max-height: 600px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+
+    #annotation-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        background: #f0f0f0;
+    }
+
+    .go-back {
+        position: absolute;
+        top: 62px;
+        left: 20px;
+        z-index: 10;
+    }
+
+    .annotation-rectangle {
+        position: absolute;
+        border: 2px dashed red;
+        pointer-events: none;
+    }
+
+    .label-input {
+        position: absolute;
+        width: 150px;
+        padding: 5px;
+        z-index: 10;
+        background: white;
+        border: 1px solid gray;
+    }
+
+    .error-message {
+        color: red;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container my-5 text-center">
+    <!-- Go Back Button -->
+    <a href="javascript:history.back()" class="btn btn-secondary go-back">
+        &larr; Go Back
+    </a>
+
+    <h2 class="mb-4">Perform Your Annotation for {{ task.title }}</h2>
+    <p class="lead mb-5">Click and draw shapes on the image to annotate. Once you're done, submit your annotations for review.</p>
+
+    <!-- Annotation Container -->
+    <div id="canvas-container">
+        <canvas id="annotation-canvas"></canvas>
+    </div>
+
+    <!-- Annotation Instructions -->
+    <div id="instructions" class="my-4">
+        <p class="text-muted">Use the rectangle tool to draw. Double-click a shape to edit its label.</p>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mt-4">
+        <form id="annotation-form" action="{{ url_for('main.submit_annotation') }}" method="POST">
+            <input type="hidden" name="task_id" value="{{ task.id }}">
+            <input type="hidden" name="annotations_data" id="annotations_data">
+            <input type="hidden" name="screenshot_data" id="screenshot_data"> <!-- Base64 screenshot -->
+            <button type="submit" id="submit-annotation" class="btn btn-success btn-lg" disabled>Submit Annotation</button>
+        </form>
+        <!-- Error Message -->
+        <div id="error-message" class="error-message"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+<script>
+    const canvas = new fabric.Canvas('annotation-canvas', {
+        selection: false,
+        preserveObjectStacking: true,
+        objectCaching: true,
+    });
+
+    // Load image into canvas
+    fabric.Image.fromURL("{{ url_for('static', filename=task.image_url) }}", (img) => {
+        const maxWidth = 800;
+        const maxHeight = 600;
+
+        const imgWidth = img.width;
+        const imgHeight = img.height;
+
+        const scaleRatio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
+
+        img.scale(scaleRatio);
+        canvas.setWidth(img.width * scaleRatio);
+        canvas.setHeight(img.height * scaleRatio);
+
+        img.set({
+            left: 0,
+            top: 0,
+            selectable: false,
+            hasControls: false,
+            hasBorders: false,
+        });
+
+        canvas.add(img);
+        canvas.sendToBack(img);
+    });
+
+    let annotations = [];
+    let currentLabel = "";
+
+    let isDrawing = false;
+    let rect, startX, startY;
+
+    canvas.on('mouse:down', (o) => {
+        if (!isDrawing) {
+            isDrawing = true;
+            const pointer = canvas.getPointer(o.e);
+            startX = pointer.x;
+            startY = pointer.y;
+            rect = new fabric.Rect({
+                left: startX,
+                top: startY,
+                fill: 'rgba(255, 0, 0, 0.3)',
+                stroke: 'red',
+                strokeWidth: 2,
+                width: 0,
+                height: 0,
+            });
+            canvas.add(rect);
+        }
+    });
+
+    canvas.on('mouse:move', (o) => {
+        if (!isDrawing) return;
+        const pointer = canvas.getPointer(o.e);
+        rect.set({
+            width: Math.abs(pointer.x - startX),
+            height: Math.abs(pointer.y - startY),
+            left: pointer.x < startX ? pointer.x : startX,
+            top: pointer.y < startY ? pointer.y : startY,
+        });
+        canvas.renderAll();
+    });
+
+    canvas.on('mouse:up', () => {
+        if (isDrawing) {
+            isDrawing = false;
+            const label = prompt('Enter label for this annotation:', '');
+            if (label) {
+                currentLabel = label;
+    
+                // Add text positioned at the center of the rectangle
+                const text = new fabric.Text(label, {
+                    left: rect.left + rect.width / 2, // Center horizontally
+                    top: rect.top + rect.height / 2, // Center vertically
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    fill: 'white', // White text color
+                    textAlign: 'center',
+                    originX: 'center', // Align text horizontally
+                    originY: 'center', // Align text vertically
+                    stroke: 'black', // Black outline for contrast
+                    strokeWidth: 0.5, // Slight stroke width for contrast
+                    fontFamily: 'sans-serif', // Fix font-family typo
+                });
+    
+                canvas.add(text);
+    
+                annotations.push({
+                    x: rect.left,
+                    y: rect.top,
+                    width: rect.width,
+                    height: rect.height,
+                    label: label,
+                    type: 'rect',
+                });
+    
+                // Enable the submit button if there's at least one annotation
+                if (annotations.length > 0) {
+                    document.getElementById('submit-annotation').disabled = false;
+                }
+            } else {
+                canvas.remove(rect);
+            }
+        }
+    });
+    
+    
+    
+
+    // Handle form submission
+    document.getElementById('annotation-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const screenshot = canvas.toDataURL('image/png'); // Original screenshot
+
+        const image = new Image();
+        image.src = screenshot;
+
+        image.onload = function () {
+            const maxWidth = 800; // Smaller dimensions
+            const maxHeight = 600;
+            const ratio = Math.min(maxWidth / image.width, maxHeight / image.height);
+
+            const canvasResized = document.createElement('canvas');
+            const ctx = canvasResized.getContext('2d');
+            canvasResized.width = image.width * ratio;
+            canvasResized.height = image.height * ratio;
+            ctx.drawImage(image, 0, 0, canvasResized.width, canvasResized.height);
+
+            // Convert to JPEG to reduce size further
+            const compressedScreenshot = canvasResized.toDataURL('image/jpeg', 0.6); // Adjust quality (0.1 to 1.0)
+
+            document.getElementById('annotations_data').value = JSON.stringify(annotations);
+            document.getElementById('screenshot_data').value = compressedScreenshot;
+
+            event.target.submit();
+        };
+    });
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+{% block footer %}
+{% endblock footer %}

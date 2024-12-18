@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Review Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <a href="{{ url_for('main.task_detail', task_id=submission.task_id) }}" class="btn btn-secondary mb-4">&larr; Back to Task</a>
+    <h2 class="mb-4">Review Details</h2>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5>Review for Submission</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Task:</strong> {{ submission.task.title }}</p>
+            <p><strong>Status:</strong> {{ review.status }}</p>
+            <p><strong>Review Message:</strong></p>
+            <p>{{ review.review_description }}</p>
+            <p><strong>Reviewed By:</strong> {{ review.admin.username }}</p>
+            <p><strong>Review Timestamp:</strong> {{ review.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-secondary text-white">
+            <h5>Submission Details</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Label:</strong> {{ submission.label }}</p>
+            <p><strong>Timestamp:</strong> {{ submission.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            {% if submission.mask_path %}
+                <h6>Mask Image:</h6>
+                <img src="{{ url_for('static', filename=submission.mask_path) }}" 
+                                 class="img-fluid" 
+                                 alt="Mask Image" 
+                                 style="max-width: 100%; height: auto;">
+            {% else %}
+                <p>No mask image available</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock footer %}

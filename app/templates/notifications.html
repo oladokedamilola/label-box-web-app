@@ -1,0 +1,60 @@
+<!-- notifications.html -->
+{% extends 'base.html' %}
+
+{% block title %}Notifications{% endblock title %}
+
+{% block content %}
+<style>
+    a {
+        text-decoration: none;
+    }
+    .notification-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .notification-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 15px;
+        transition: background-color 0.3s ease;
+    }
+    .notification-item:hover {
+        background-color: #f1f1f1;
+    }
+    .notification-item-unread {
+        background-color: #fff8e1;
+    }
+    .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .notification-timestamp {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Notifications</h2>
+    <div class="notification-container">
+        {% if notifications %}
+            {% for notification in notifications %}
+                <a href="{{ url_for('main.task_detail', task_id=notification.task_id) }}" 
+                   class="d-block notification-item {% if not notification.read %}notification-item-unread{% endif %}">
+                    <div class="notification-title">{{ notification.message|safe }}</div>
+                    <div class="notification-timestamp text-end">
+                        {{ notification.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">You have no notifications.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock footer %}

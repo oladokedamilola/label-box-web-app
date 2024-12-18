@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Projects{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Projects</h2>
+    
+    <!-- Create Project Link -->
+    <a href="{{ url_for('admin.create_project') }}" class="btn btn-primary mb-4">Create Project</a>
+
+    <!-- Check if there are no projects -->
+    {% if projects.total == 0 %}
+        <p>You have not created any projects yet. Start by creating one!</p>
+    {% else %}
+        <!-- Projects Grid -->
+        <div class="row">
+            {% for project in projects.items %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ project.image_url }}" class="card-img-top" alt="{{ project.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text">{{ project.description[:100] }}...</p>
+                        <a href="{{ url_for('admin.project_detail', project_id=project.id) }}" class="btn btn-primary">View Project</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        {% if projects.pages > 1 %}
+        <div class="d-flex justify-content-between">
+            {% if projects.has_prev %}
+                <a class="btn btn-secondary" href="{{ url_for('admin.project_list', page=projects.prev_num) }}">Previous</a>
+            {% endif %}
+            <span>Page {{ projects.page }} of {{ projects.pages }}</span>
+            {% if projects.has_next %}
+                <a class="btn btn-secondary" href="{{ url_for('admin.project_list', page=projects.next_num) }}">Next</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+{% block footer %}
+
+{% endblock %}

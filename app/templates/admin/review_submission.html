@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Review Submission{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <!-- Go Back Button -->
+    <div class="mb-4">
+        <a href="{{ url_for('main.task_detail', task_id=submission.task_id) }}" class="btn btn-secondary">
+            &larr; Go Back
+        </a>
+    </div>
+
+    <h2 class="mb-4 text-center">Review Submission for {{ submission.user.username }}</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form method="POST" class="shadow p-4 rounded bg-light">
+                <div class="mb-4">
+                    <label for="status" class="form-label">Review Status</label>
+                    <select class="form-select" id="status" name="status" required>
+                        <option value="Complete">Complete</option>
+                        <option value="Partially Complete">Partially Complete</option>
+                        <option value="Not Complete">Not Complete</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="review_description" class="form-label">Review Description</label>
+                    <textarea class="form-control" id="review_description" name="review_description" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">Submit Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

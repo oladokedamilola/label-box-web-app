@@ -1,0 +1,161 @@
+
+body, html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}   
+
+/* Navbar Customization */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to the navbar */
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff !important;
+    text-transform: uppercase;
+}
+
+.nav-link {
+    color: #adb5bd !important; /* Muted color for inactive links */
+    font-size: 1rem;
+    margin-left: 10px;
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
+}
+
+/* Red hover effect for the Logout link */
+.nav-link.logout:hover {
+    color: red !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #f8f9fa !important; /* Lighten color on hover */
+    text-decoration: none;
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.nav-link.active {
+    color: #fff !important; /* Highlight active link */
+    font-weight: bold;
+}
+
+
+
+/* Custom styling for the homepage */
+.hero-section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 70vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.hero-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/static/images/hero.jpg') no-repeat center center;
+    background-size: cover;
+    z-index: 1;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.7); 
+}
+
+
+
+
+#annotation-container {
+    position: relative;
+    display: inline-block;
+    cursor: crosshair;
+}
+#annotation-overlay {
+    display: none;
+    border: 2px dashed rgba(0, 123, 255, 0.6);
+    background-color: rgba(0, 123, 255, 0.2);
+    pointer-events: none;
+}
+.annotation-box {
+    background-color: rgba(255, 0, 0, 0.2); 
+}
+.btn {
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.btn:hover {
+    background-color: #218838;
+}
+.text-muted {
+    font-size: 1rem;
+}
+#annotation-image {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+
+section {
+    margin-top: 40px;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+
+/* flash messages */
+.flash-message-container {
+    z-index: 1050; 
+    width: 100%;
+    max-width:200x;
+    text-align: center;
+}
+.alert {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.custom-flash-width {
+    width: 300px; /* Adjust the width as desired */
+    max-width: 80%; /* Ensure it looks good on smaller screens */
+    text-align: center; /* Center align the text */
+}
+
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-animation {
+    animation: shake 0.5s ease-in-out infinite;
+}

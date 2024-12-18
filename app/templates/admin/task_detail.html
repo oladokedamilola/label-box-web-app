@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Detail - {{ task.title }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <!-- Back button to project details page -->
+    <a href="{{ url_for('admin.project_detail', project_id=task.project_id) }}" class="btn btn-secondary mb-3">Go Back</a>
+
+    <!-- Task Details Card -->
+    <div class="card">
+        <div class="card" style="max-width: 500px; margin: 0 auto;">
+            <!-- Dynamically generate the URL for the image -->
+            {% if task.image_url %}
+                <img src="{{ url_for('static', filename=task.image_url) }}" class="card-img-top img-fluid" alt="{{ task.title }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='default-task-image.jpg') }}" class="card-img-top img-fluid" alt="Default Task Image">
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <h3 class="card-title">{{ task.title }}</h3>
+            <p class="card-text"><strong>Description:</strong> {{ task.description }}</p>
+            <p class="card-text"><strong>Project:</strong> 
+                <a href="{{ url_for('admin.project_detail', project_id=task.project_id) }}">
+                    {{ task.project.name }}
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% block footer %}
+{% endblock footer %}

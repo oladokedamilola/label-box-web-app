@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h2 class="mb-4">Welcome, {{ current_user.username }}!</h2>
+        <p class="lead">Here’s an overview of your tasks:</p>
+    </div>
+    
+    {% if tasks|length > 0 %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-4">
+            {% for task in tasks %}
+                <div class="col">
+                    <div class="card shadow-sm h-100">
+                        {% if task.image_url %}
+                            <img src="{{ url_for('static', filename=task.image_url) }}" 
+                                 class="card-img-top" alt="{{ task.title }}" style="max-height: 200px; object-fit: contain;">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='default-image.jpg') }}" 
+                                 class="card-img-top" alt="Task Image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.title }}</h5>
+                            <p class="card-text">{{ task.description }}</p>
+                            <a href="{{ url_for('main.task_detail', task_id=task.id) }}" class="btn btn-primary">View Task</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-4">
+            You don’t have any tasks yet. Check back later!
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+
+{% block footer %}
+{% endblock footer %}

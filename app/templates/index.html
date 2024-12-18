@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+<div>
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="overlay"></div>
+        <div class="container position-relative">
+            <h2 class="display-4 text-white">Welcome to Labelbox Web App</h2>
+            <p class="lead text-white">Simplify and streamline your data annotation tasks with our web-based solution.</p>
+            <a href="#features" class="btn btn-primary btn-lg mt-3">Explore Features</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="my-5 container">
+        <h3 class="text-center mb-4">Features</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow">
+                    <div class="card-body">
+                        <i class="fas fa-database fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Database Storage</h5>
+                        <p class="card-text">Securely store and manage all your annotation tasks and outputs in the cloud.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow">
+                    <div class="card-body">
+                        <i class="fas fa-paint-brush fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Interactive Annotation</h5>
+                        <p class="card-text">Easily annotate your data with an intuitive interface designed for efficiency.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow">
+                    <div class="card-body">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Seamless Deployment</h5>
+                        <p class="card-text">Deploy and access your annotation app from anywhere without dependency on local storage.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="my-5 container">
+        <h3 class="text-center mb-4">How It Works</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow">
+                    <div class="card-body">
+                        <i class="fas fa-file-alt fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Step 1: Upload Data</h5>
+                        <p class="card-text">Upload your data to the platform, whether it's images, text, or other file types.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow">
+                    <div class="card-body">
+                        <i class="fas fa-edit fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Step 2: Annotate</h5>
+                        <p class="card-text">Use our intuitive interface to annotate your data with accuracy and ease.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center shadow">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Step 3: Review & Submit</h5>
+                        <p class="card-text">Review your annotations and submit your work for processing or exporting.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Annotation Task Section -->
+    <section id="annotation-task" class="my-5 text-center">
+        <h3>Start an Annotation Task</h3>
+        <div id="annotation-container" class="my-3">
+            <img id="annotation-image" class="img-fluid rounded shadow" 
+                 src="{{ url_for('static', filename='images/annot.jpg') }}" 
+                 alt="Annotate Me" style="max-width: 400px; height: auto;">
+        </div>
+        <a href="{{ url_for('main.task_list') }}" class="btn btn-primary btn-lg">See Tasks</a>
+    </section>
+    
+</div>
+{% endblock %}

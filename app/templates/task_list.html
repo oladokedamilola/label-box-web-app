@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Task List{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4 text-center">Available Annotation Tasks</h2>
+
+    {% if tasks %}
+        <!-- Display tasks in a responsive grid of cards -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for task in tasks %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename=task.image_url) }}" class="card-img-top" alt="{{ task.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.title }}</h5>
+                        <p class="card-text">{{ task.description }}</p>
+                
+                        <!-- Perform Task Button (Visible only for non-admins) -->
+                        {% if current_user.role != 'admin' %}
+                            <a href="{{ url_for('main.annotation_page', task_id=task.id) }}" class="btn btn-primary">Perform Task</a>
+                        {% endif %}
+                        
+                        <!-- Admin-specific buttons -->
+                        {% if current_user.role == 'admin' %}
+                            <a href="{{ url_for('admin.update_task', task_id=task.id) }}" class="btn btn-warning">Update</a>
+                            <form action="{{ url_for('admin.delete_task', task_id=task.id) }}" method="POST" style="display: inline-block;">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?');">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination controls -->
+        {% if tasks|length >= 10 %}
+        <nav aria-label="Task List Pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.task_list', page=page-1) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for p in range(1, total_pages + 1) %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('main.task_list', page=p) }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page < total_pages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('main.task_list', page=page+1) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <!-- Message and image when no tasks are available -->
+        <div class="text-center">
+            <p class="text-muted">No tasks are currently available. Please check back later.</p>
+            <img src="{{ url_for('static', filename='images/no-data.jpg') }}" 
+                 alt="No tasks available" 
+                 class="img-fluid my-4" 
+                 style="max-width: 350px;">
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+
+{% block footer %}
+{% endblock footer %}
