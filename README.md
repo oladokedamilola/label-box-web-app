@@ -50,7 +50,7 @@ Follow these steps to set up the project locally:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone <repository_url>
+git clone git https://github.com/oladokedamilola/label-box-web-app.git
 cd labelbox-web-app
 ```
 
@@ -86,27 +86,6 @@ python run.py
    - Review all submitted tasks.
    - Approve or reject tasks with real-time notifications sent to annotators.
    - Access task details and submissions with a collapsible view.
-
----
-
-## Screenshots
-
-Below are some screenshots showcasing the features of the app:
-
-### 1. Task List View (Admin)
-- Displays all tasks in a card layout with collapsible details.
-
-![Task List](path_to_screenshot_1.png)
-
-### 2. Task Details View
-- View task descriptions, submissions, and actions to approve or reject.
-
-![Task Details](path_to_screenshot_2.png)
-
-### 3. Annotator Notification
-- Annotators receive real-time notifications after task reviews.
-
-![Annotator Notification](path_to_screenshot_3.png)
 
 ---
 
