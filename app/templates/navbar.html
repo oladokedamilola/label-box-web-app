@@ -6,16 +6,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <!-- Home link -->
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="/">Home</a>
-                </li>
-                <!-- Tasks link visible to all users -->
-                <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/tasks' %}active{% endif %}" href="/tasks">Tasks</a>
-                </li>   
-                <!-- Conditional links based on authentication status -->
+                <!-- Home link visible only to authenticated users -->
                 {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" aria-current="page" href="/">Home</a>
+                    </li>
+                {% endif %}
+                
+                <!-- Tasks link visible only to authenticated users -->
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/tasks' %}active{% endif %}" href="/tasks">Tasks</a>
+                    </li>
                     <!-- Admin link visible only to users with admin role -->
                     {% if current_user.role == 'admin' %}
                         <li class="nav-item">

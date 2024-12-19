@@ -40,17 +40,40 @@ def register():
     return render_template('auth/register.html', form=form)
 
 # Login Route
+# @auth.route('/login', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         user = User.query.filter_by(username=form.username.data).first()
+#         if user and user.check_password(form.password.data):
+#             login_user(user)
+#             flash('Login successful', 'success')
+#             return redirect(url_for('main.index'))
+#         else:
+#             flash('Invalid username or password', 'danger')
+#     return render_template('auth/login.html', form=form)
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+
+    # Check if the form is valid and the user exists
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('Login successful', 'success')
+
+            # Check if there is a 'next' parameter in the URL, and redirect accordingly
+            next_page = request.args.get('next')
+            if next_page:
+                return redirect(next_page)
             return redirect(url_for('main.index'))
+
         else:
             flash('Invalid username or password', 'danger')
+
+    # If the form is not submitted or invalid, we render the login page
     return render_template('auth/login.html', form=form)
 
 # Logout Route

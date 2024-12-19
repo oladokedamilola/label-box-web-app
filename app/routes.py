@@ -26,6 +26,11 @@ def before_request():
 # Home Route
 @main.route('/')
 def index():
+    # Check if the user is not logged in
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.register'))  # Redirect to the registration page if not logged in
+    
+    # If logged in, render the homepage
     return render_template('index.html')
 
 @main.route('/tasks')
@@ -150,6 +155,32 @@ def not_found_error(error):
 def internal_error(error):
     flash('An internal error occurred. Please try again later.', 'danger')  
     return render_template('errors/500.html'), 500
+
+@main.app_errorhandler(403)
+def forbidden_error(error):
+    flash('You do not have permission to access this page.', 'danger')
+    return render_template('errors/403.html'), 403
+
+@main.app_errorhandler(405)
+def method_not_allowed_error(error):
+    flash('The method is not allowed for the requested URL.', 'warning')
+    return render_template('errors/405.html'), 405
+
+@main.app_errorhandler(401)
+def unauthorized_error(error):
+    flash('You need to log in to access this page.', 'danger')
+    return redirect(url_for('auth.login', next=request.url))
+
+@main.app_errorhandler(408)
+def request_timeout_error(error):
+    flash('The request timed out. Please try again later.', 'danger')
+    return render_template('errors/408.html'), 408
+
+@main.app_errorhandler(422)
+def unprocessable_entity_error(error):
+    flash('The request was well-formed but could not be followed due to semantic errors.', 'warning')
+    return render_template('errors/422.html'), 422
+
 
 @main.route('/notifications')
 @login_required

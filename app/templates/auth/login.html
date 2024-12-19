@@ -32,6 +32,9 @@
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
             </div>
+            
+             <!-- Hidden Next Field -->
+             <input type="hidden" name="next" value="{{ request.args.get('next') }}">
 
             <!-- Submit Button -->
             <div class="mb-3">

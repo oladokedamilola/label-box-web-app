@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-3">405</h1>
+    <p class="lead">The method is not allowed for the requested URL.</p>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary">Go Back Home</a>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

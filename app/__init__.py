@@ -16,6 +16,9 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
+    # Define the login view
+    login_manager.login_view = 'auth.login'  # Redirect unauthenticated users to the login page
+
     # Define the user loader
     @login_manager.user_loader
     def load_user(user_id):
