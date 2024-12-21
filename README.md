@@ -34,6 +34,7 @@ A web-based annotation tool for managing image annotation projects and tasks. Th
 
 ### Frontend
 - **HTML**: Markup language for structuring the app.
+- **JavaScript: Programming language used for adding interactivity, dynamic effects, and powering the annotation functionality (e.g., drawing, labeling, and editing shapes) using libraries like Fabric.js
 - **CSS**: Styling for a clean, modern design.
 - **Bootstrap**: Responsive framework for building a mobile-friendly interface.
 - **FontAwesome**: Icons for interactive elements.
