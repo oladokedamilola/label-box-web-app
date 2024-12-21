@@ -27,6 +27,25 @@ A web-based annotation tool for managing image annotation projects and tasks. Th
 - Mobile-friendly and responsive layout.
 - Includes collapsible dropdowns for task details for a clean and efficient UI.
 
+
+---
+
+## Tech Stack
+
+### Frontend
+- **HTML**: Markup language for structuring the app.
+- **CSS**: Styling for a clean, modern design.
+- **Bootstrap**: Responsive framework for building a mobile-friendly interface.
+- **FontAwesome**: Icons for interactive elements.
+
+### Backend
+- **Python**: Core programming language for the application.
+- **Flask**: Lightweight web framework for building and managing routes, views, and the app structure.
+- **MySQL**: Relational database for storing user, project, and task data.
+
+---
+
+
 ---
 
 ## File Structure
